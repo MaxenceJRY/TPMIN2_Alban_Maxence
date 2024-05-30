@@ -4,23 +4,24 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val addButton = findViewById<Button>(R.id.home_add_button)
         val listButton = findViewById<Button>(R.id.home_list_button)
+        val editText = findViewById<EditText>(R.id.searchCountry_editText)
 
-        addButton.click {
-            val intent = Intent(this, AddClientActivity::class.java)
-            startActivity(intent)
-        }
 
         listButton.click {
-            val intent = Intent(this, ListClientActivity::class.java)
-            startActivity(intent)
+            val query = editText.text.toString()
+            if (query.isNotEmpty()) {
+                val intent = Intent(this, ListClientActivity::class.java)
+                intent.putExtra("query", query)
+                startActivity(intent)
+            }
         }
     }
 }

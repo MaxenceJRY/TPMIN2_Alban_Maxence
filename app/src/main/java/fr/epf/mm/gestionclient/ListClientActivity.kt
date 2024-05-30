@@ -36,27 +36,18 @@ class ListClientActivity : AppCompatActivity() {
 
         recyclerView.layoutManager =
             LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = ClientAdapter(emptyList())
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.list_clients, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.action_add_client -> {
-                startActivity(Intent(this, AddClientActivity::class.java))
-            }
-            R.id.action_synchro -> {
-                synchro()
-            }
+        val query = intent.getStringExtra("query")
+        if (query != null && query.isNotEmpty()) {
+            searchCountries(query)
+        } else {
+            Log.e(TAG, "No query provided")
         }
-        return super.onOptionsItemSelected(item)
+
     }
 
-    private fun synchro() {
+    private fun searchCountries (query: String){
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -79,7 +70,7 @@ class ListClientActivity : AppCompatActivity() {
         // Utilisation de CoroutineScope pour lancer une coroutine sur le dispatcher IO
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val countries = restCountriesService.getAllCountries()
+                val countries = restCountriesService.getCountriesByName(query)
                 Log.d(TAG, "Fetched countries: $countries")
 
                 // Trier les pays par ordre alphabétique du nom commun
@@ -104,6 +95,4 @@ class ListClientActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }
