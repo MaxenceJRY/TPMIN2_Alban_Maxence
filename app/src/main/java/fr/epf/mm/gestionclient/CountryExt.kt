@@ -2,10 +2,10 @@ package fr.epf.mm.gestionclient
 
 import android.util.Log
 import android.view.View
-import fr.epf.mm.gestionclient.model.Client
+import fr.epf.mm.gestionclient.model.Country
 
-val Client.nomComplet : String
-    get() = "${firstName}"
+val Country.nomComplet : String
+    get() = "${name}"
 
 fun View.click( action : (View) -> Unit){
     Log.d("CLICK","click !")

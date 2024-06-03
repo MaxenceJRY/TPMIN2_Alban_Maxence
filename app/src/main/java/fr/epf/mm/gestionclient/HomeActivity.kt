@@ -18,7 +18,7 @@ class HomeActivity : AppCompatActivity() {
         listButton.click {
             val query = editText.text.toString()
             if (query.isNotEmpty()) {
-                val intent = Intent(this, ListClientActivity::class.java)
+                val intent = Intent(this, ListCountryActivity::class.java)
                 intent.putExtra("query", query)
                 startActivity(intent)
             }

@@ -14,7 +14,7 @@
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
         <activity
-            android:name=".DetailsClientActivity"
+            android:name=".DetailsCountryActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
@@ -25,12 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".AddClientActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ListClientActivity"
+            android:name=".ListCountryActivity"
             android:exported="true" />
     </application>
 

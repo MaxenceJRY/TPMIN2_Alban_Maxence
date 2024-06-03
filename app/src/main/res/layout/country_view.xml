@@ -6,22 +6,22 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/client_view_cardview"
+        android:id="@+id/country_view_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/client_view_textview"
+            android:id="@+id/country_view_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            tools:text="@tools:sample/full_names" />
+            tools:text="États-Unis" />
 
         <ImageView
             android:id="@+id/flag_view_imageview"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
 </FrameLayout>
