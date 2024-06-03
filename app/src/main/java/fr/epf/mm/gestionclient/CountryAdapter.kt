@@ -1,5 +1,6 @@
 package fr.epf.mm.gestionclient
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,18 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.epf.mm.gestionclient.model.Country
 
-//public class ClientViewHolder extends RecyclerView.ViewHolder{
-//
-//    public ClientViewHolder(View view){
-//        super(view)
-//    }
-
-const val CLIENT_ID_EXTRA = "clientId"
-
-class ClientViewHolder(view : View) : RecyclerView.ViewHolder(view)
-
-
-class ClientAdapter(private val clients: List<Country>) : RecyclerView.Adapter<ClientAdapter.ClientViewHolder>() {
+interface OnCountryClickListener {
+    fun onCountryClick(country: Country)
+}
+class ClientAdapter(private val countries: List<Country>, private val listener: OnCountryClickListener) : RecyclerView.Adapter<ClientAdapter.ClientViewHolder>() {
 
     class ClientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val flagImageview: ImageView = itemView.findViewById(R.id.flag_view_imageview)
@@ -33,15 +26,19 @@ class ClientAdapter(private val clients: List<Country>) : RecyclerView.Adapter<C
     }
 
     override fun onBindViewHolder(holder: ClientViewHolder, position: Int) {
-        val client = clients[position]
-        holder.nameTextView.text = client.name
+        val country = countries[position]
+        holder.nameTextView.text = country.name
 
         Glide.with(holder.itemView.context)
-            .load(client.flag)
+            .load(country.flag)
             .into(holder.flagImageview)
+
+        holder.itemView.setOnClickListener {
+            listener.onCountryClick(country)
+        }
     }
 
-    override fun getItemCount() = clients.size
+    override fun getItemCount() = countries.size
 }
 
 

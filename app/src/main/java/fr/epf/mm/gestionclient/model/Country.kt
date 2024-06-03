@@ -7,7 +7,10 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Country(
     val name: String,
-    val flag: String
+    val flag: String,
+    val population: Long = 0,
+    val area: Double = 0.0,
+
 ) : Parcelable{
     companion object {
 
