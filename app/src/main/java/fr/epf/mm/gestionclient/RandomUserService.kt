@@ -3,6 +3,7 @@ package fr.epf.mm.gestionclient
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 //interface RandomUserService {
@@ -11,8 +12,8 @@ import retrofit2.http.Query
 //}
 
 interface RestCountriesService {
-    @GET("v3.1/all")
-    suspend fun getAllCountries(): List<CountryResponse>
+    @GET("v3.1/name/{name}")
+    suspend fun getCountriesByName(@Path("name") name: String): List<CountryResponse>
 }
 
 data class CountryResponse(

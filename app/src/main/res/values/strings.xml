@@ -1,21 +1,6 @@
 <resources>
-    <string name="app_name">GestionClient2023MIN2</string>
-    <string name="client_last_name">Nom</string>
-    <string name="add_button_label">Ajouter</string>
-    <string name="client_gender">Sexe</string>
-    <string name="man">Homme</string>
-    <string name="woman">Femme</string>
-    <string name="age">Age</string>
-    <string name="level">Niveau</string>
-    <string name="advanced">Avancé</string>
-    <string name="add_client_message">Client ajouté</string>
+    <string name="app_name">Countries List</string>
     <string name="title_activity_home">HomeActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
@@ -52,5 +37,7 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="chercher_un_pays">chercher un pays</string>
+    <string name="valider">Valider</string>
 
 </resources>
