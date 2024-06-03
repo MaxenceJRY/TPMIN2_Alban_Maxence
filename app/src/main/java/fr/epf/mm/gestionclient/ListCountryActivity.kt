@@ -1,5 +1,6 @@
 package fr.epf.mm.gestionclient
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,21 +20,19 @@ import java.util.concurrent.TimeUnit
 
 private const val TAG = "ListClientActivity"
 
-class ListCountryActivity : AppCompatActivity() {
+class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
 
     lateinit var recyclerView: RecyclerView
-
-    private lateinit var gif_loading_layout: LinearLayout
-
+    private lateinit var gifLoadingLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_country)
 
-        gif_loading_layout = findViewById(R.id.gif_loading_layout)
+        gifLoadingLayout = findViewById(R.id.gif_loading_layout)
         recyclerView = findViewById(R.id.list_country_recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = ClientAdapter(emptyList())
+        recyclerView.adapter = ClientAdapter(emptyList(), this)
 
         val query = intent.getStringExtra("query")
         if (query != null && query.isNotEmpty()) {
@@ -63,16 +62,10 @@ class ListCountryActivity : AppCompatActivity() {
 
         val restCountriesService = retrofit.create(RestCountriesService::class.java)
 
-        gif_loading_layout.visibility = View.VISIBLE
-        // Utilisation de CoroutineScope pour lancer une coroutine sur le dispatcher IO
+        gifLoadingLayout.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
-            // Nombre maximum de tentatives
             val maxRetries = 3
-
-            // Délai de base entre les tentatives (en millisecondes)
             val baseDelay = 1000L
-
-            // Variable pour stocker le nombre de tentatives effectuées
             var currentRetry = 0
 
             while (currentRetry < maxRetries) {
@@ -80,41 +73,33 @@ class ListCountryActivity : AppCompatActivity() {
                     val countries = restCountriesService.getCountriesByName(query)
                     Log.d(TAG, "Fetched countries: $countries")
 
-                    // Trier les pays par ordre alphabétique du nom commun
                     val sortedCountries = countries.sortedBy { it.name.common }
 
-                    // Map sorted countries to clients or any other relevant data structure
                     val clients = sortedCountries.map {
                         Log.d(TAG, "Country: ${it.name.common}, Flag URL: ${it.flags.png}")
                         Country(
-                            name = it.name.common, // Using the common name of the country
-                            flag = it.flags.png // URL of the flag image
+                            name = it.name.common,
+                            flag = it.flags.png,
+                            population = it.population, // Add population
+                            area = it.area // Add area
                         )
                     }
 
-                    // Mettre à jour l'UI sur le thread principal
                     withContext(Dispatchers.Main) {
-                        gif_loading_layout.visibility = View.GONE
-                        val adapter = ClientAdapter(clients)
+                        gifLoadingLayout.visibility = View.GONE
+                        val adapter = ClientAdapter(clients, this@ListCountryActivity)
                         recyclerView.adapter = adapter
                     }
 
-                    // Arrêter la boucle de tentatives si la requête réussit
                     break
                 } catch (e: Exception) {
                     Log.e(TAG, "Error fetching countries: ${e.message}")
-
-                    // Augmenter le délai de mise à jour après chaque tentative
                     val delay = baseDelay * Math.pow(2.0, currentRetry.toDouble()).toLong()
-
-                    // Attendre avant la prochaine tentative
                     delay(delay)
-
                     currentRetry++
                 }
             }
 
-            // Si le nombre maximum de tentatives est atteint, afficher un message d'erreur
             if (currentRetry == maxRetries) {
                 withContext(Dispatchers.Main) {
                     Log.e(TAG, "Failed to fetch countries after $maxRetries retries")
@@ -122,4 +107,15 @@ class ListCountryActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onCountryClick(country: Country) {
+        val intent = Intent(this, CountryDetailsActivity::class.java).apply {
+            putExtra("country_name", country.name)
+            putExtra("country_flag", country.flag)
+            putExtra("country_population", country.population)
+            putExtra("country_area", country.area)
+        }
+        startActivity(intent)
+    }
 }
+
