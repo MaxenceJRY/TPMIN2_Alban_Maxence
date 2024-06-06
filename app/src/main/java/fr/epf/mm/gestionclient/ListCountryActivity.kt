@@ -35,10 +35,6 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = CountryAdapter(emptyList(), this)
 
-        val query = intent.getStringExtra("query")
-        val language = intent.getStringExtra("language")?: "en"
-        if (query != null && query.isNotEmpty()) {
-            searchCountries(query, language)
         val countries = intent.getParcelableArrayListExtra<Country>("countries")
         if (countries != null && countries.isNotEmpty()) {
             gifLoadingLayout.visibility = View.GONE
@@ -46,7 +42,8 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             recyclerView.adapter = adapter
         } else {
             val query = intent.getStringExtra("query")
-            val language = intent.getStringExtra("language")?: "en"
+            val language = intent.getStringExtra("language")?: "fr"
+            Log.d(TAG, "Language: $language")
             if (query != null && query.isNotEmpty()) {
                 searchCountries(query, language)
             } else {

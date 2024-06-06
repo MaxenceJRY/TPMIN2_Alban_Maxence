@@ -42,6 +42,15 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+        val radioGroup = findViewById<RadioGroup>(R.id.radioGroupLangue)
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            selectedLanguage = when (checkedId) {
+                R.id.radioButtonFr -> "fr"
+                R.id.radioButtonEn -> "en"
+                R.id.radioButtonEs -> "es"
+                else -> "fr"
+            }
+        }
         getAllButton.setOnClickListener {
             displayAllItemsFromDatabase()
         }
@@ -66,14 +75,6 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        val radioGroup = findViewById<RadioGroup>(R.id.radioGroupLangue)
-        radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            selectedLanguage = when (checkedId) {
-                R.id.radioButtonFr -> "fr"
-                R.id.radioButtonEn -> "en"
-                R.id.radioButtonEs -> "es"
-                else -> "fr"
-            }
-        }
+
     }
 }

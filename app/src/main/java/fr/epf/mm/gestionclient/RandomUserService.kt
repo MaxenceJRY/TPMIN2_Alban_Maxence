@@ -9,7 +9,7 @@ interface GeoNamesService {
     @GET("countryInfoJSON")
     suspend fun searchCountries(
         @Query("username") username: String,
-        @Query("lang") lang: String = "en",
+        @Query("lang") lang: String = "fr",
         @Query("name") country: String? = null
     ): GeoNamesResponse
 }
