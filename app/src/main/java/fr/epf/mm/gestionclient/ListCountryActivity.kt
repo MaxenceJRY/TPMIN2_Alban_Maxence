@@ -47,17 +47,17 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val client = OkHttpClient.Builder()
+        val country = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(45, TimeUnit.SECONDS)
+            .readTimeout(45, TimeUnit.SECONDS)
+            .writeTimeout(45, TimeUnit.SECONDS)
             .build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://restcountries.com/")
             .addConverterFactory(MoshiConverterFactory.create())
-            .client(client)
+            .client(country)
             .build()
 
         val restCountriesService = retrofit.create(RestCountriesService::class.java)

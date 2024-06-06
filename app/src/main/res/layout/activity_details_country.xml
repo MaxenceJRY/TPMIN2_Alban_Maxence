@@ -1,97 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".DetailsCountryActivity">
+    android:padding="16dp"
+    android:background="@color/background_light"
+    tools:context=".CountryDetailsActivity">
 
     <TextView
         android:id="@+id/country_name_textview"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textSize="34sp"
-        tools:text="Nom du pays" />
+        android:textColor="@color/primary_text"
+        android:padding="8dp"
+        tools:text="Nom du pays"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@color/teal_200"
-        android:orientation="horizontal">
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/country_name_textview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="8dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:orientation="vertical"
-            android:padding="6dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/Population"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="Population :" />
+                android:text="Population :"
+                android:textColor="@color/secondary_text"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/Superficie"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text=" Superficie :" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:orientation="vertical"
-            android:padding="6dp">
+                android:text="Superficie :"
+                android:textColor="@color/secondary_text"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/country_population_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="TextView"
-                tools:text="1801745120" />
+                android:textSize="16sp"
+                android:textColor="@color/primary_text"
+                tools:text="1801745120"
+                app:layout_constraintTop_toTopOf="@id/Population"
+                app:layout_constraintStart_toEndOf="@id/Population"
+                android:layout_marginStart="8dp" />
 
             <TextView
                 android:id="@+id/country_area_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="TextView" />
-        </LinearLayout>
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/country_population_textview"
+                app:layout_constraintTop_toTopOf="@id/Superficie"
+                tools:text="551695.0 km²" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:orientation="horizontal">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/country_flag_cardview"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="60dp"
-                android:layout_weight="0"
-                android:gravity="center_vertical"
-                android:text="Drapeau :" />
+                <ImageView
+                    android:id="@+id/country_flag_imageview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/backgrounds/scenic" />
 
-            <ImageView
-                android:id="@+id/country_flag_imageview"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:padding="4dp"
-                tools:src="@tools:sample/backgrounds/scenic" />
-        </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
-
-</LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
