@@ -39,5 +39,6 @@
     </string>
     <string name="chercher_un_pays">Chercher un pays</string>
     <string name="valider">Valider</string>
+    <string name="GetAll">Get Favorite</string>
 
 </resources>

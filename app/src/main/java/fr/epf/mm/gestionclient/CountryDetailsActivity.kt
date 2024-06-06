@@ -3,11 +3,13 @@ package fr.epf.mm.gestionclient
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import fr.epf.mm.gestionclient.API.AppDatabase
+import fr.epf.mm.gestionclient.API.DatabaseProvider
 import fr.epf.mm.gestionclient.model.FavoriteCountry
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,6 +23,7 @@ class CountryDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_country)
+        val button = findViewById<ImageButton>(R.id.buttonAddToFavorites)
 
         val countryName = intent.getStringExtra("country_name")
         val countryFlag = intent.getStringExtra("country_flag")
@@ -32,6 +35,9 @@ class CountryDetailsActivity : AppCompatActivity() {
         val populationTextView: TextView = findViewById(R.id.country_population_textview)
         val areaTextView: TextView = findViewById(R.id.country_area_textview)
 
+        button.setOnClickListener() {
+            onAddToFavoritesClicked()
+        }
         nameTextView.text = countryName
         populationTextView.text = "$countryPopulation"
         areaTextView.text = "$countryArea km²"
@@ -40,10 +46,7 @@ class CountryDetailsActivity : AppCompatActivity() {
             .load(countryFlag)
             .into(flagImageView)
 
-        appDatabase = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "app-database"
-        ).build()
+        appDatabase = DatabaseProvider.getInstance(this)
     }
 
     fun onAddToFavoritesClicked() {
@@ -55,7 +58,6 @@ class CountryDetailsActivity : AppCompatActivity() {
     }
 
     private suspend fun saveCountryToFavorites(countryInfo: FavoriteCountry) {
-        Log.d("test","test country !");
         withContext(Dispatchers.IO) {
             appDatabase.favoriteCountryDao().insert(countryInfo)
         }
