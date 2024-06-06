@@ -2,11 +2,22 @@ package fr.epf.mm.gestionclient
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.room.Room
 import com.bumptech.glide.Glide
+import fr.epf.mm.gestionclient.API.AppDatabase
+import fr.epf.mm.gestionclient.model.FavoriteCountry
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+
 
 class CountryDetailsActivity : AppCompatActivity() {
+
+    private lateinit var appDatabase: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_country)
@@ -28,5 +39,25 @@ class CountryDetailsActivity : AppCompatActivity() {
         Glide.with(this)
             .load(countryFlag)
             .into(flagImageView)
+
+        appDatabase = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "app-database"
+        ).build()
+    }
+
+    fun onAddToFavoritesClicked() {
+        val countryInfo = GeoNameCountry("France", 67076000, 1.888334, "Paris", "fr")
+        val favoriteCountry = FavoriteCountry.fromCountryInfo(countryInfo)
+        GlobalScope.launch {
+            saveCountryToFavorites(favoriteCountry)
+        }
+    }
+
+    private suspend fun saveCountryToFavorites(countryInfo: FavoriteCountry) {
+        Log.d("test","test country !");
+        withContext(Dispatchers.IO) {
+            appDatabase.favoriteCountryDao().insert(countryInfo)
+        }
     }
 }
