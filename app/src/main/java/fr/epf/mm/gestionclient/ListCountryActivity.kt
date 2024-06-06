@@ -23,8 +23,6 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
 
     lateinit var recyclerView: RecyclerView
     private lateinit var gifLoadingLayout: LinearLayout
-
-    // Définissez votre nom d'utilisateur GeoNames ici
     private val geoNamesUsername = "maxenceepf"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +34,18 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = CountryAdapter(emptyList(), this)
 
-        val query = intent.getStringExtra("query")
-        if (query != null && query.isNotEmpty()) {
-            searchCountries()
+        val countries = intent.getParcelableArrayListExtra<Country>("countries")
+        if (countries != null && countries.isNotEmpty()) {
+            gifLoadingLayout.visibility = View.GONE
+            val adapter = CountryAdapter(countries, this@ListCountryActivity)
+            recyclerView.adapter = adapter
         } else {
-            Log.e(TAG, "No query provided")
+            val query = intent.getStringExtra("query")
+            if (query != null && query.isNotEmpty()) {
+                searchCountries()
+            } else {
+                Log.e(TAG, "No query provided")
+            }
         }
     }
 

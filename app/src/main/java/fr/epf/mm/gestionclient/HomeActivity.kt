@@ -9,9 +9,11 @@ import android.widget.EditText
 import androidx.room.Room
 import fr.epf.mm.gestionclient.API.AppDatabase
 import fr.epf.mm.gestionclient.API.DatabaseProvider
+import fr.epf.mm.gestionclient.model.Country
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeActivity : AppCompatActivity() {
 
@@ -44,7 +46,21 @@ class HomeActivity : AppCompatActivity() {
     private fun displayAllItemsFromDatabase() {
         CoroutineScope(Dispatchers.IO).launch {
             val allItems = appDatabase.favoriteCountryDao().getAll()
-            Log.d("HomeActivity", "All items: $allItems")
+            withContext(Dispatchers.Main) {
+                val countries = ArrayList(allItems.map {
+                    Country(
+                        name = it.countryName,
+                        population = it.population,
+                        area = it.areaInSqKm,
+                        flag = it.flag
+                    )
+                })
+
+                val intent = Intent(this@HomeActivity, ListCountryActivity::class.java).apply {
+                    putParcelableArrayListExtra("countries", countries)
+                }
+                startActivity(intent)
+            }
         }
     }
 }

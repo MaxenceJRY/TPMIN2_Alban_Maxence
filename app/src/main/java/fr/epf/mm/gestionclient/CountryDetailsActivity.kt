@@ -19,10 +19,11 @@ import kotlinx.coroutines.Dispatchers
 class CountryDetailsActivity : AppCompatActivity() {
 
     private lateinit var appDatabase: AppDatabase
+    private lateinit var buttonAddToFavorites: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_country)
-        val button = findViewById<ImageButton>(R.id.buttonAddToFavorites)
+        buttonAddToFavorites = findViewById(R.id.buttonAddToFavorites)
 
         val countryName = intent.getStringExtra("country_name")
         val countryFlag = intent.getStringExtra("country_flag")
@@ -34,7 +35,16 @@ class CountryDetailsActivity : AppCompatActivity() {
         val populationTextView: TextView = findViewById(R.id.country_population_textview)
         val areaTextView: TextView = findViewById(R.id.country_area_textview)
 
-        button.setOnClickListener() {
+        appDatabase = DatabaseProvider.getInstance(this)
+
+        GlobalScope.launch {
+            val isCountryInFavorites = countryName?.let { checkCountryInFavorites(it) }
+            if (isCountryInFavorites != null) {
+                updateFavoriteButtonImage(isCountryInFavorites)
+            }
+        }
+
+        buttonAddToFavorites.setOnClickListener() {
             onAddToFavoritesClicked(countryName!!, countryPopulation, countryArea, countryFlag!!)
         }
         nameTextView.text = countryName
@@ -45,7 +55,7 @@ class CountryDetailsActivity : AppCompatActivity() {
             .load(countryFlag)
             .into(flagImageView)
 
-        appDatabase = DatabaseProvider.getInstance(this)
+
     }
 
     fun onAddToFavoritesClicked(name : String, population : Int, area : Double, flag : String) {
@@ -57,8 +67,20 @@ class CountryDetailsActivity : AppCompatActivity() {
     }
 
     private suspend fun saveCountryToFavorites(countryInfo: FavoriteCountry) {
+        updateFavoriteButtonImage(true)
         withContext(Dispatchers.IO) {
             appDatabase.favoriteCountryDao().insert(countryInfo)
         }
+    }
+
+    private suspend fun checkCountryInFavorites(countryName: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            appDatabase.favoriteCountryDao().getCountryByName(countryName) != null
+        }
+    }
+
+    private fun updateFavoriteButtonImage(isInFavorites: Boolean) {
+        val imageResource = if (isInFavorites) android.R.drawable.btn_star_big_on else android.R.drawable.btn_star_big_off
+        buttonAddToFavorites.setImageResource(imageResource)
     }
 }
