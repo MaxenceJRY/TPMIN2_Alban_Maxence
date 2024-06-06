@@ -1,35 +1,29 @@
 package fr.epf.mm.gestionclient
 
-import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
-//interface RandomUserService {
-//    @GET("api")
-//suspend  fun getUsers(@Query("results") size: Int) : GetUsersResult
-//}
-
-interface RestCountriesService {
-    @GET("v3.1/name/{name}")
-    suspend fun getCountriesByName(@Path("name") name: String): List<CountryResponse>
+interface GeoNamesService {
+    @GET("countryInfoJSON")
+    suspend fun getCountries(
+        @Query("username") username: String
+    ): GeoNamesResponse
 }
 
-data class CountryResponse(
-    val name: Name,
-    val population: Long,
-    val area: Double,
-    val region: String,
-    val subregion: String,
-    val flags : Flags
-)
 
-data class Name(
-    val common: String,
-    val official: String
+data class GeoNamesResponse(
+    val geonames: List<GeoNameCountry>
 )
-
 data class Flags(
     val png: String
 )
+data class GeoNameCountry(
+    val countryName: String,
+    val population: Int,
+    val areaInSqKm: Double,
+    val capital: String,
+    val countryCode: String
+) {
+    val flag: String
+        get() = "https://flagcdn.com/w80/${countryCode.lowercase()}.png"
+}

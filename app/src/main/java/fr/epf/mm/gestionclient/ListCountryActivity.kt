@@ -13,7 +13,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import pl.droidsonroids.gif.GifImageView
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -25,6 +24,9 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
     lateinit var recyclerView: RecyclerView
     private lateinit var gifLoadingLayout: LinearLayout
 
+    // Définissez votre nom d'utilisateur GeoNames ici
+    private val geoNamesUsername = "maxenceepf"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_country)
@@ -32,22 +34,22 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
         gifLoadingLayout = findViewById(R.id.gif_loading_layout)
         recyclerView = findViewById(R.id.list_country_recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = ClientAdapter(emptyList(), this)
+        recyclerView.adapter = CountryAdapter(emptyList(), this)
 
         val query = intent.getStringExtra("query")
         if (query != null && query.isNotEmpty()) {
-            searchCountries(query)
+            searchCountries()
         } else {
             Log.e(TAG, "No query provided")
         }
     }
 
-    private fun searchCountries(query: String) {
+    private fun searchCountries() {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val country = OkHttpClient.Builder()
+        val client = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .connectTimeout(45, TimeUnit.SECONDS)
             .readTimeout(45, TimeUnit.SECONDS)
@@ -55,12 +57,12 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://restcountries.com/")
+            .baseUrl("http://api.geonames.org/")
             .addConverterFactory(MoshiConverterFactory.create())
-            .client(country)
+            .client(client)
             .build()
 
-        val restCountriesService = retrofit.create(RestCountriesService::class.java)
+        val geoNamesService = retrofit.create(GeoNamesService::class.java)
 
         gifLoadingLayout.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
@@ -70,24 +72,26 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
 
             while (currentRetry < maxRetries) {
                 try {
-                    val countries = restCountriesService.getCountriesByName(query)
+                    val response = geoNamesService.getCountries(geoNamesUsername)
+                    val countries = response.geonames
+
                     Log.d(TAG, "Fetched countries: $countries")
 
-                    val sortedCountries = countries.sortedBy { it.name.common }
+                    val sortedCountries = countries.sortedBy { it.countryName }
 
                     val clients = sortedCountries.map {
-                        Log.d(TAG, "Country: ${it.name.common}, Flag URL: ${it.flags.png}")
+                        Log.d(TAG, "Sorted countries: ${it.flag}")
                         Country(
-                            name = it.name.common,
-                            flag = it.flags.png,
-                            population = it.population, // Add population
-                            area = it.area // Add area
+                            name = it.countryName,
+                            population = it.population,
+                            area = it.areaInSqKm,
+                            flag = it.flag
                         )
                     }
 
                     withContext(Dispatchers.Main) {
                         gifLoadingLayout.visibility = View.GONE
-                        val adapter = ClientAdapter(clients, this@ListCountryActivity)
+                        val adapter = CountryAdapter(clients, this@ListCountryActivity)
                         recyclerView.adapter = adapter
                     }
 
@@ -118,4 +122,3 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
         startActivity(intent)
     }
 }
-
