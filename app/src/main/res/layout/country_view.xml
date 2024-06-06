@@ -9,7 +9,9 @@
         android:id="@+id/country_view_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_margin="4dp"
+        app:cardBackgroundColor="@color/purple_200"
+        app:cardCornerRadius="8dp">
 
         <TextView
             android:id="@+id/country_view_textview"
@@ -22,6 +24,7 @@
             android:id="@+id/flag_view_imageview"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="4dp"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
 </FrameLayout>

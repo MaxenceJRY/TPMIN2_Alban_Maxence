@@ -2,14 +2,31 @@ package fr.epf.mm.gestionclient
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+
+private const val TAG = "CountryDetailsActivity"
 
 class CountryDetailsActivity : AppCompatActivity() {
+    private lateinit var geoNamesService: GeoNamesService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_country)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://api.geonames.org/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+
+        geoNamesService = retrofit.create(GeoNamesService::class.java)
 
         val countryName = intent.getStringExtra("country_name")
         val countryFlag = intent.getStringExtra("country_flag")
