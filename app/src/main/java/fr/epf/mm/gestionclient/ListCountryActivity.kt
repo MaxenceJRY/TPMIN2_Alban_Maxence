@@ -13,6 +13,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.intellij.lang.annotations.Language
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -34,6 +35,10 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = CountryAdapter(emptyList(), this)
 
+        val query = intent.getStringExtra("query")
+        val language = intent.getStringExtra("language")?: "en"
+        if (query != null && query.isNotEmpty()) {
+            searchCountries(query, language)
         val countries = intent.getParcelableArrayListExtra<Country>("countries")
         if (countries != null && countries.isNotEmpty()) {
             gifLoadingLayout.visibility = View.GONE
@@ -41,15 +46,16 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             recyclerView.adapter = adapter
         } else {
             val query = intent.getStringExtra("query")
+            val language = intent.getStringExtra("language")?: "en"
             if (query != null && query.isNotEmpty()) {
-                searchCountries()
+                searchCountries(query, language)
             } else {
                 Log.e(TAG, "No query provided")
             }
         }
     }
 
-    private fun searchCountries() {
+    private fun searchCountries(query: String, language: String) {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -75,17 +81,12 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             val baseDelay = 1000L
             var currentRetry = 0
 
+            var countries = emptyList<Country>() // Liste pour stocker tous les pays
+
             while (currentRetry < maxRetries) {
                 try {
-                    val response = geoNamesService.getCountries(geoNamesUsername)
-                    val countries = response.geonames
-
-                    Log.d(TAG, "Fetched countries: $countries")
-
-                    val sortedCountries = countries.sortedBy { it.countryName }
-
-                    val clients = sortedCountries.map {
-                        Log.d(TAG, "Sorted countries: ${it.flag}")
+                    val response = geoNamesService.searchCountries(geoNamesUsername, language)
+                    countries = response.geonames.map {
                         Country(
                             name = it.countryName,
                             population = it.population,
@@ -94,12 +95,7 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
                         )
                     }
 
-                    withContext(Dispatchers.Main) {
-                        gifLoadingLayout.visibility = View.GONE
-                        val adapter = CountryAdapter(clients, this@ListCountryActivity)
-                        recyclerView.adapter = adapter
-                    }
-
+                    // Sortie de la boucle une fois que tous les pays sont obtenus
                     break
                 } catch (e: Exception) {
                     Log.e(TAG, "Error fetching countries: ${e.message}")
@@ -114,8 +110,20 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
                     Log.e(TAG, "Failed to fetch countries after $maxRetries retries")
                 }
             }
+
+            // Filtrer les pays en fonction de la requête
+            val filteredCountries = countries.filter { it.name.contains(query, ignoreCase = true) }
+                .sortedBy { it.name }
+
+            withContext(Dispatchers.Main) {
+                gifLoadingLayout.visibility = View.GONE
+                val adapter = CountryAdapter(filteredCountries, this@ListCountryActivity)
+                recyclerView.adapter = adapter
+            }
         }
     }
+
+
 
     override fun onCountryClick(country: Country) {
         val intent = Intent(this, CountryDetailsActivity::class.java).apply {

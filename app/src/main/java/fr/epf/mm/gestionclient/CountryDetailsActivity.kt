@@ -2,28 +2,42 @@ package fr.epf.mm.gestionclient
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageButton
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ImageButton
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import fr.epf.mm.gestionclient.API.AppDatabase
 import fr.epf.mm.gestionclient.API.DatabaseProvider
 import fr.epf.mm.gestionclient.model.Country
 import fr.epf.mm.gestionclient.model.FavoriteCountry
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.Dispatchers
 
+
+private const val TAG = "CountryDetailsActivity"
 
 class CountryDetailsActivity : AppCompatActivity() {
-
+    private lateinit var geoNamesService: GeoNamesService
     private lateinit var appDatabase: AppDatabase
     private lateinit var buttonAddToFavorites: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_country)
         buttonAddToFavorites = findViewById(R.id.buttonAddToFavorites)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://api.geonames.org/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+
+        geoNamesService = retrofit.create(GeoNamesService::class.java)
 
         val countryName = intent.getStringExtra("country_name")
         val countryFlag = intent.getStringExtra("country_flag")

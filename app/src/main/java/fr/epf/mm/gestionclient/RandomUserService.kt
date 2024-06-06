@@ -1,21 +1,22 @@
 package fr.epf.mm.gestionclient
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface GeoNamesService {
     @GET("countryInfoJSON")
-    suspend fun getCountries(
-        @Query("username") username: String
+    suspend fun searchCountries(
+        @Query("username") username: String,
+        @Query("lang") lang: String = "en",
+        @Query("name") country: String? = null
     ): GeoNamesResponse
 }
 
 
 data class GeoNamesResponse(
     val geonames: List<GeoNameCountry>
-)
-data class Flags(
-    val png: String
 )
 data class GeoNameCountry(
     val countryName: String,

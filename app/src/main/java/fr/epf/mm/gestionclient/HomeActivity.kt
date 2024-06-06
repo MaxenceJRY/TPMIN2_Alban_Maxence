@@ -14,10 +14,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.widget.RadioGroup
 
 class HomeActivity : AppCompatActivity() {
 
+    private var selectedLanguage = "en"
     private lateinit var appDatabase: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -33,6 +36,7 @@ class HomeActivity : AppCompatActivity() {
             if (query.isNotEmpty()) {
                 val intent = Intent(this, ListCountryActivity::class.java).apply {
                     putExtra("query", query)
+                    putExtra("language", selectedLanguage)
                 }
                 startActivity(intent)
             }
@@ -60,6 +64,15 @@ class HomeActivity : AppCompatActivity() {
                     putParcelableArrayListExtra("countries", countries)
                 }
                 startActivity(intent)
+            }
+        }
+        val radioGroup = findViewById<RadioGroup>(R.id.radioGroupLangue)
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            selectedLanguage = when (checkedId) {
+                R.id.radioButtonFr -> "fr"
+                R.id.radioButtonEn -> "en"
+                R.id.radioButtonEs -> "es"
+                else -> "fr"
             }
         }
     }
