@@ -2,14 +2,13 @@ package fr.epf.mm.gestionclient
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.room.Room
 import com.bumptech.glide.Glide
 import fr.epf.mm.gestionclient.API.AppDatabase
 import fr.epf.mm.gestionclient.API.DatabaseProvider
+import fr.epf.mm.gestionclient.model.Country
 import fr.epf.mm.gestionclient.model.FavoriteCountry
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,7 +35,7 @@ class CountryDetailsActivity : AppCompatActivity() {
         val areaTextView: TextView = findViewById(R.id.country_area_textview)
 
         button.setOnClickListener() {
-            onAddToFavoritesClicked()
+            onAddToFavoritesClicked(countryName!!, countryPopulation, countryArea, countryFlag!!)
         }
         nameTextView.text = countryName
         populationTextView.text = "$countryPopulation"
@@ -49,8 +48,8 @@ class CountryDetailsActivity : AppCompatActivity() {
         appDatabase = DatabaseProvider.getInstance(this)
     }
 
-    fun onAddToFavoritesClicked() {
-        val countryInfo = GeoNameCountry("France", 67076000, 1.888334, "Paris", "fr")
+    fun onAddToFavoritesClicked(name : String, population : Int, area : Double, flag : String) {
+        val countryInfo = Country(name, population, area, flag)
         val favoriteCountry = FavoriteCountry.fromCountryInfo(countryInfo)
         GlobalScope.launch {
             saveCountryToFavorites(favoriteCountry)
