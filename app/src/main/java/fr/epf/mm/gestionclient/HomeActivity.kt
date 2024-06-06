@@ -14,8 +14,7 @@ class HomeActivity : AppCompatActivity() {
         val listButton = findViewById<Button>(R.id.home_list_button)
         val editText = findViewById<EditText>(R.id.searchCountry_editText)
 
-
-        listButton.click {
+        listButton.setOnClickListener {
             val query = editText.text.toString()
             if (query.isNotEmpty()) {
                 val intent = Intent(this, ListCountryActivity::class.java)

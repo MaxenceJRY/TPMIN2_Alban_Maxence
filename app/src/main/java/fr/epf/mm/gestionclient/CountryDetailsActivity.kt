@@ -13,7 +13,7 @@ class CountryDetailsActivity : AppCompatActivity() {
 
         val countryName = intent.getStringExtra("country_name")
         val countryFlag = intent.getStringExtra("country_flag")
-        val countryPopulation = intent.getLongExtra("country_population", 0)
+        val countryPopulation = intent.getIntExtra("country_population", 0)
         val countryArea = intent.getDoubleExtra("country_area", 0.0)
 
         val nameTextView: TextView = findViewById(R.id.country_name_textview)
