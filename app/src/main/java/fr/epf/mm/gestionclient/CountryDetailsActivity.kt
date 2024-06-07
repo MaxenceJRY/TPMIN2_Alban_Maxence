@@ -26,6 +26,7 @@ class CountryDetailsActivity : AppCompatActivity() {
     private lateinit var geoNamesService: GeoNamesService
     private lateinit var appDatabase: AppDatabase
     private lateinit var buttonAddToFavorites: ImageButton
+    private var isCountryInFavorites: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,6 @@ class CountryDetailsActivity : AppCompatActivity() {
         val countryFlag = intent.getStringExtra("country_flag")
         val countryPopulation = intent.getIntExtra("country_population", 0)
         val countryArea = intent.getDoubleExtra("country_area", 0.0)
-
         val nameTextView: TextView = findViewById(R.id.country_name_textview)
         val flagImageView: ImageView = findViewById(R.id.country_flag_imageview)
         val populationTextView: TextView = findViewById(R.id.country_population_textview)
@@ -52,15 +52,22 @@ class CountryDetailsActivity : AppCompatActivity() {
         appDatabase = DatabaseProvider.getInstance(this)
 
         GlobalScope.launch {
-            val isCountryInFavorites = countryName?.let { checkCountryInFavorites(it) }
+            isCountryInFavorites = countryName?.let { checkCountryInFavorites(it) }!!
             if (isCountryInFavorites != null) {
                 updateFavoriteButtonImage(isCountryInFavorites)
             }
         }
 
-        buttonAddToFavorites.setOnClickListener() {
-            onAddToFavoritesClicked(countryName!!, countryPopulation, countryArea, countryFlag!!)
+        buttonAddToFavorites.setOnClickListener {
+            if (countryName != null && countryFlag != null) {
+                    if (isCountryInFavorites) {
+                        onRemoveFromFavoritesClicked(countryName)
+                    } else {
+                        onAddToFavoritesClicked(countryName, countryPopulation, countryArea, countryFlag)
+                    }
+                }
         }
+
         nameTextView.text = countryName
         populationTextView.text = "$countryPopulation"
         areaTextView.text = "$countryArea km²"
@@ -82,8 +89,23 @@ class CountryDetailsActivity : AppCompatActivity() {
 
     private suspend fun saveCountryToFavorites(countryInfo: FavoriteCountry) {
         updateFavoriteButtonImage(true)
+        isCountryInFavorites = true
         withContext(Dispatchers.IO) {
             appDatabase.favoriteCountryDao().insert(countryInfo)
+        }
+    }
+
+    fun onRemoveFromFavoritesClicked(name : String) {
+        GlobalScope.launch {
+            removeCountryFromFavorites(name)
+        }
+    }
+
+    private suspend fun removeCountryFromFavorites(countryName: String) {
+        updateFavoriteButtonImage(false)
+        isCountryInFavorites = false
+        withContext(Dispatchers.IO) {
+            appDatabase.favoriteCountryDao().deleteByCountryName(countryName)
         }
     }
 
