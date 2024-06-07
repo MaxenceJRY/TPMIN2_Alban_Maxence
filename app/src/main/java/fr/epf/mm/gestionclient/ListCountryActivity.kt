@@ -104,11 +104,13 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
                             name = it.countryName,
                             population = it.population,
                             area = it.areaInSqKm,
-                            flag = it.flag
+                            flag = it.flag,
+                            north = it.north,
+                            south = it.south,
+                            east = it.east,
+                            west = it.west
                         )
                     }
-
-                    // Sortie de la boucle une fois que tous les pays sont obtenus
                     break
                 } catch (e: Exception) {
                     Log.e(TAG, "Error fetching countries: ${e.message}")
@@ -144,6 +146,10 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             putExtra("country_flag", country.flag)
             putExtra("country_population", country.population)
             putExtra("country_area", country.area)
+            putExtra("north", country.north)
+            putExtra("south", country.south)
+            putExtra("east", country.east)
+            putExtra("west", country.west)
         }
         startActivity(intent)
     }

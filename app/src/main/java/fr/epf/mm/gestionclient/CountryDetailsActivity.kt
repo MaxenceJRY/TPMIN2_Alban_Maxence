@@ -46,6 +46,11 @@ class CountryDetailsActivity : AppCompatActivity() {
         val countryFlag = intent.getStringExtra("country_flag")
         val countryPopulation = intent.getIntExtra("country_population", 0)
         val countryArea = intent.getDoubleExtra("country_area", 0.0)
+        val north = intent.getDoubleExtra("north", 0.0)
+        val south = intent.getDoubleExtra("south", 0.0)
+        val east = intent.getDoubleExtra("east", 0.0)
+        val west = intent.getDoubleExtra("west", 0.0)
+
         val nameTextView: TextView = findViewById(R.id.country_name_textview)
         val flagImageView: ImageView = findViewById(R.id.country_flag_imageview)
         val populationTextView: TextView = findViewById(R.id.country_population_textview)
@@ -57,6 +62,17 @@ class CountryDetailsActivity : AppCompatActivity() {
             isCountryInFavorites = countryName?.let { checkCountryInFavorites(it) }!!
             if (isCountryInFavorites != null) {
                 updateFavoriteButtonImage(isCountryInFavorites)
+            }
+
+            val weatherObservations = fetchWeatherObservations(
+                north = north,
+                south = south,
+                east = east,
+                west = west,
+            )
+            println("teste" + north + south + east + west)
+            weatherObservations.forEach { observation ->
+                println("Station: ${observation.stationName}, Temp: ${observation.temperature}, Humidity: ${observation.humidity}, Clouds: ${observation.clouds}, Date: ${observation.datetime}")
             }
         }
 
@@ -136,4 +152,15 @@ class CountryDetailsActivity : AppCompatActivity() {
         val imageResource = if (isInFavorites) android.R.drawable.btn_star_big_on else android.R.drawable.btn_star_big_off
         buttonAddToFavorites.setImageResource(imageResource)
     }
+
+    suspend fun fetchWeatherObservations(north: Double, south: Double, east: Double, west: Double, ): List<WeatherObservation> {
+        return geoNamesService.searchWeather(
+            north = north,
+            south = south,
+            east = east,
+            west = west,
+            username = "maxenceepf",
+        ).weatherObservations
+    }
+
 }
