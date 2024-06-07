@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +15,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.intellij.lang.annotations.Language
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -49,6 +50,21 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             } else {
                 Log.e(TAG, "No query provided")
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.go_back_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_back -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -88,11 +104,13 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
                             name = it.countryName,
                             population = it.population,
                             area = it.areaInSqKm,
-                            flag = it.flag
+                            flag = it.flag,
+                            north = it.north,
+                            south = it.south,
+                            east = it.east,
+                            west = it.west
                         )
                     }
-
-                    // Sortie de la boucle une fois que tous les pays sont obtenus
                     break
                 } catch (e: Exception) {
                     Log.e(TAG, "Error fetching countries: ${e.message}")
@@ -128,6 +146,10 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             putExtra("country_flag", country.flag)
             putExtra("country_population", country.population)
             putExtra("country_area", country.area)
+            putExtra("north", country.north)
+            putExtra("south", country.south)
+            putExtra("east", country.east)
+            putExtra("west", country.west)
         }
         startActivity(intent)
     }
