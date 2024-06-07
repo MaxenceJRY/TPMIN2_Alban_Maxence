@@ -4,10 +4,9 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="chercher_un_pays">Chercher un pays</string>
     <string name="valider">Valider</string>
-    <string name="GetAll">Get Favorite</string>
+    <string name="GetAll">Obtenir les favoris</string>
     <string name="espagnol">Espagnol</string>
     <string name="anglais">Anglais</string>
     <string name="francais">Français</string>
     <string name="Langue">Langue</string>
-
 </resources>

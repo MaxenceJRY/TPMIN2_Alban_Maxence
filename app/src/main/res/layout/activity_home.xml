@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -12,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginBottom="24dp"
         android:orientation="horizontal">
 
         <EditText
@@ -39,45 +41,7 @@
 
     </LinearLayout>
 
-    <!-- Sélecteur de langue -->
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Choisir la langue"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
-    <RadioGroup
-        android:id="@+id/radioGroupLangue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:checkedButton="@id/radioButtonFr"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radioButtonFr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Français" />
-
-        <RadioButton
-            android:id="@+id/radioButtonEn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp"
-            android:text="English" />
-
-        <RadioButton
-            android:id="@+id/radioButtonEs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Espanol" />
-    </RadioGroup>
 
     <Button
         android:id="@+id/get_all_button"

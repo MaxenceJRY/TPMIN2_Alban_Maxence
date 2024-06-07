@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/settings"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/Langue"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/item1"
+                android:title="@string/francais" />
+            <item
+                android:id="@+id/item2"
+                android:title="@string/anglais" />
+            <item
+                android:id="@+id/item3"
+                android:title="@string/espagnol" />
+        </menu>
+    </item>
 </menu>
