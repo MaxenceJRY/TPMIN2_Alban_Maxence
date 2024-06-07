@@ -3,6 +3,8 @@ package fr.epf.mm.gestionclient
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ImageButton
@@ -77,6 +79,21 @@ class CountryDetailsActivity : AppCompatActivity() {
             .into(flagImageView)
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.go_back_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_back -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     fun onAddToFavoritesClicked(name : String, population : Int, area : Double, flag : String) {
