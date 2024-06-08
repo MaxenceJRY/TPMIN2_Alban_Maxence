@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.gif.GifDrawable
@@ -40,7 +41,7 @@ class HomeActivity : AppCompatActivity() {
         setAppLanguage(selectedLanguage)
         setContentView(R.layout.activity_home)
 
-        val mainLayout = findViewById<LinearLayout>(R.id.main_layout)
+        val mainLayout = findViewById<FrameLayout>(R.id.main_layout)
         Glide.with(this)
             .asGif()
             .load(R.drawable.background_ciel)
