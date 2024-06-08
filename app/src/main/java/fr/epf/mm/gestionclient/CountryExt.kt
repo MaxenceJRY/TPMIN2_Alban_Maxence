@@ -8,6 +8,5 @@ val Country.nomComplet : String
     get() = "${name}"
 
 fun View.click( action : (View) -> Unit){
-    Log.d("CLICK","click !")
     this.setOnClickListener(action)
 }

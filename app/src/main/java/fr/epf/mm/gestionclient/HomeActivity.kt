@@ -1,5 +1,4 @@
 package fr.epf.mm.gestionclient
-
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -55,6 +54,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             })
 
+
         appDatabase = DatabaseProvider.getInstance(this)
 
         val listButton = findViewById<Button>(R.id.home_list_button)
@@ -103,6 +103,7 @@ class HomeActivity : AppCompatActivity() {
     private fun updateLanguage(languageCode: String) {
         selectedLanguage = languageCode
         setAppLanguage(languageCode)
+
 
         val refresh = Intent(this, HomeActivity::class.java)
         finish()
