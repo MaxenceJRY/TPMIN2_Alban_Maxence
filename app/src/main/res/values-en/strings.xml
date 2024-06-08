@@ -10,4 +10,8 @@
     <string name="francais">French</string>
     <string name="Langue">Language</string>
     <string name="Info_appli">Watch the weather around the world!</string>
+    <string name="cloud_image_desc">Image representing cloudy conditions</string>
+    <string name="station">Station: </string>
+    <string name="temperature">Temperature: </string>
+    <string name="humidity">Humidity: </string>
 </resources>

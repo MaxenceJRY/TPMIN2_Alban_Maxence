@@ -9,7 +9,11 @@ data class FavoriteCountry(
     val countryName: String,
     val population: Int,
     val areaInSqKm: Double,
-    val flag: String
+    val flag: String,
+    val north: Double,
+    val south: Double,
+    val east: Double,
+    val west: Double
 ){
     companion object {
         fun fromCountryInfo(countryInfo: Country): FavoriteCountry {
@@ -18,6 +22,10 @@ data class FavoriteCountry(
                 areaInSqKm = countryInfo.area,
                 flag = countryInfo.flag,
                 population = countryInfo.population,
+                north = countryInfo.north,
+                south = countryInfo.south,
+                east = countryInfo.east,
+                west = countryInfo.west
             )
         }
     }

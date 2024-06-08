@@ -127,7 +127,11 @@ class HomeActivity : AppCompatActivity() {
                         name = it.countryName,
                         population = it.population,
                         area = it.areaInSqKm,
-                        flag = it.flag
+                        flag = it.flag,
+                        north = it.north,
+                        south = it.south,
+                        east = it.east,
+                        west = it.west
                     )
                 })
 

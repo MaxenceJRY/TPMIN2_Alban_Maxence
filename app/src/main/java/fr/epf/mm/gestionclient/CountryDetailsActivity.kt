@@ -1,5 +1,6 @@
 package fr.epf.mm.gestionclient
 
+import WeatherAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,8 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ImageButton
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +58,9 @@ class CountryDetailsActivity : AppCompatActivity() {
         val flagImageView: ImageView = findViewById(R.id.country_flag_imageview)
         val populationTextView: TextView = findViewById(R.id.country_population_textview)
         val areaTextView: TextView = findViewById(R.id.country_area_textview)
+        val recyclerView = findViewById<RecyclerView>(R.id.list_weather_recyclerview)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = WeatherAdapter(emptyList())
 
         appDatabase = DatabaseProvider.getInstance(this)
 
@@ -70,9 +76,9 @@ class CountryDetailsActivity : AppCompatActivity() {
                 east = east,
                 west = west,
             )
-            println("teste" + north + south + east + west)
-            weatherObservations.forEach { observation ->
-                println("Station: ${observation.stationName}, Temp: ${observation.temperature}, Humidity: ${observation.humidity}, Clouds: ${observation.clouds}, Date: ${observation.datetime}")
+
+            withContext(Dispatchers.Main) {
+                recyclerView.adapter = WeatherAdapter(weatherObservations)
             }
         }
 
@@ -81,7 +87,7 @@ class CountryDetailsActivity : AppCompatActivity() {
                     if (isCountryInFavorites) {
                         onRemoveFromFavoritesClicked(countryName)
                     } else {
-                        onAddToFavoritesClicked(countryName, countryPopulation, countryArea, countryFlag)
+                        onAddToFavoritesClicked(countryName, countryPopulation, countryArea, countryFlag, north, south, east, west)
                     }
                 }
         }
@@ -112,8 +118,8 @@ class CountryDetailsActivity : AppCompatActivity() {
         }
     }
 
-    fun onAddToFavoritesClicked(name : String, population : Int, area : Double, flag : String) {
-        val countryInfo = Country(name, population, area, flag)
+    fun onAddToFavoritesClicked(name : String, population : Int, area : Double, flag : String, north: Double, south: Double, east: Double, west: Double) {
+        val countryInfo = Country(name, population, area, flag, north, south, east, west)
         val favoriteCountry = FavoriteCountry.fromCountryInfo(countryInfo)
         GlobalScope.launch {
             saveCountryToFavorites(favoriteCountry)
