@@ -1,14 +1,21 @@
 package fr.epf.mm.gestionclient
+
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import fr.epf.mm.gestionclient.API.AppDatabase
 import fr.epf.mm.gestionclient.API.DatabaseProvider
 import fr.epf.mm.gestionclient.model.Country
@@ -30,9 +37,22 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        setAppLanguage(selectedLanguage) // Définir la langue par défaut
+        setAppLanguage(selectedLanguage)
         setContentView(R.layout.activity_home)
 
+        val mainLayout = findViewById<LinearLayout>(R.id.main_layout)
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.background_ciel)
+            .into(object : CustomTarget<GifDrawable>() {
+                override fun onResourceReady(resource: GifDrawable, transition: Transition<in GifDrawable>?) {
+                    mainLayout.background = resource
+                    resource.start()
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+            })
 
         appDatabase = DatabaseProvider.getInstance(this)
 
@@ -80,8 +100,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun updateLanguage(languageCode: String) {
-        selectedLanguage = languageCode // Sauvegarde de la langue sélectionnée
-        setAppLanguage(languageCode) // Définir la langue avec la nouvelle sélection
+        selectedLanguage = languageCode
+        setAppLanguage(languageCode)
 
         val refresh = Intent(this, HomeActivity::class.java)
         finish()

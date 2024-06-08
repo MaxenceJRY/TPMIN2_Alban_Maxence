@@ -11,4 +11,11 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
 
+    <color name="principal">#FFF8E1 </color>
+    <color name="secondaire_1">#EF9C66</color>
+    <color name="secondaire_2">#FCDC94</color>
+    <color name="texte">#6D4C41</color>
+    <color name="tertiaire_1">#78ABA8</color>
+    <color name="tertiaire_2">#D9E4E3</color>
+
 </resources>
