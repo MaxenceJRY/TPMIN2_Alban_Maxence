@@ -10,4 +10,8 @@
     <string name="francais">Français</string>
     <string name="Langue">Langue</string>
     <string name="Info_appli">Regardez la météo dans le monde entier !</string>
+    <string name="cloud_image_desc">Image représentant les conditions nuageuses</string>
+    <string name="station">Station: </string>
+    <string name="temperature">Température: </string>
+    <string name="humidity">Humidité: </string>
 </resources>
