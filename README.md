@@ -29,4 +29,4 @@ de plusieurs stations différentes présentent dans le pays.
 Cliquez sur la petite étoile pour mettre le pays en favoris.
 
 <img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/abe67744-82e7-4935-b899-c8174afb4396" width="150">
-<img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/4156da2d-f850-4463-84c6-42e050d79fec" width="150">
+<img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/fb6e14cb-d817-48b4-9f9f-1fbfda247134" width="150">
