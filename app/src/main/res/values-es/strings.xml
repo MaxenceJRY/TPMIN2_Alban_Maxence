@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lista de países</string>
+    <string name="title_activity_home">Actividad Principal</string>
+    <string name="chercher_un_pays">Buscar un país</string>
+    <string name="valider">Validar</string>
+    <string name="GetAll">Obtener favoritos</string>
+    <string name="espagnol">Español</string>
+    <string name="anglais">Inglés</string>
+    <string name="francais">Francés</string>
+    <string name="Langue">Idioma</string>
+    <string name="Info_appli">Vea el tiempo en todo el mundo !</string>
+    <string name="cloud_image_desc">Imagen que representa condiciones nubladas</string>
+    <string name="station">Estación: </string>
+    <string name="temperature">Temperatura: </string>
+    <string name="humidity">Humedad: </string>
+</resources>

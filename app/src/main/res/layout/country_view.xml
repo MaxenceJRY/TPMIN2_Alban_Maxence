@@ -9,19 +9,23 @@
         android:id="@+id/country_view_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_margin="4dp"
+        app:cardBackgroundColor="@color/tertiaire_1"
+        app:cardCornerRadius="8dp">
 
         <TextView
             android:id="@+id/country_view_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
+            android:textColor="@color/texte"
             tools:text="États-Unis" />
 
         <ImageView
             android:id="@+id/flag_view_imageview"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="4dp"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
 </FrameLayout>

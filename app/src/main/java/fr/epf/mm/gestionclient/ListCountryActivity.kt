@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +15,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import pl.droidsonroids.gif.GifImageView
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -24,6 +25,7 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
 
     lateinit var recyclerView: RecyclerView
     private lateinit var gifLoadingLayout: LinearLayout
+    private val geoNamesUsername = "maxenceepf"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,22 +34,46 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
         gifLoadingLayout = findViewById(R.id.gif_loading_layout)
         recyclerView = findViewById(R.id.list_country_recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = ClientAdapter(emptyList(), this)
+        recyclerView.adapter = CountryAdapter(emptyList(), this)
 
-        val query = intent.getStringExtra("query")
-        if (query != null && query.isNotEmpty()) {
-            searchCountries(query)
+        val countries = intent.getParcelableArrayListExtra<Country>("countries")
+        if (countries != null && countries.isNotEmpty()) {
+            gifLoadingLayout.visibility = View.GONE
+            val adapter = CountryAdapter(countries, this@ListCountryActivity)
+            recyclerView.adapter = adapter
         } else {
-            Log.e(TAG, "No query provided")
+            val query = intent.getStringExtra("query")
+            val language = intent.getStringExtra("language")?: "fr"
+            Log.d(TAG, "Language: $language")
+            if (query != null && query.isNotEmpty()) {
+                searchCountries(query, language)
+            } else {
+                Log.e(TAG, "No query provided")
+            }
         }
     }
 
-    private fun searchCountries(query: String) {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.go_back_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_back -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun searchCountries(query: String, language: String) {
         val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val country = OkHttpClient.Builder()
+        val client = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .connectTimeout(45, TimeUnit.SECONDS)
             .readTimeout(45, TimeUnit.SECONDS)
@@ -55,12 +81,12 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://restcountries.com/")
+            .baseUrl("http://api.geonames.org/")
             .addConverterFactory(MoshiConverterFactory.create())
-            .client(country)
+            .client(client)
             .build()
 
-        val restCountriesService = retrofit.create(RestCountriesService::class.java)
+        val geoNamesService = retrofit.create(GeoNamesService::class.java)
 
         gifLoadingLayout.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
@@ -68,29 +94,23 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             val baseDelay = 1000L
             var currentRetry = 0
 
+            var countries = emptyList<Country>() // Liste pour stocker tous les pays
+
             while (currentRetry < maxRetries) {
                 try {
-                    val countries = restCountriesService.getCountriesByName(query)
-                    Log.d(TAG, "Fetched countries: $countries")
-
-                    val sortedCountries = countries.sortedBy { it.name.common }
-
-                    val clients = sortedCountries.map {
-                        Log.d(TAG, "Country: ${it.name.common}, Flag URL: ${it.flags.png}")
+                    val response = geoNamesService.searchCountries(geoNamesUsername, language)
+                    countries = response.geonames.map {
                         Country(
-                            name = it.name.common,
-                            flag = it.flags.png,
-                            population = it.population, // Add population
-                            area = it.area // Add area
+                            name = it.countryName,
+                            population = it.population,
+                            area = it.areaInSqKm,
+                            flag = it.flag,
+                            north = it.north,
+                            south = it.south,
+                            east = it.east,
+                            west = it.west
                         )
                     }
-
-                    withContext(Dispatchers.Main) {
-                        gifLoadingLayout.visibility = View.GONE
-                        val adapter = ClientAdapter(clients, this@ListCountryActivity)
-                        recyclerView.adapter = adapter
-                    }
-
                     break
                 } catch (e: Exception) {
                     Log.e(TAG, "Error fetching countries: ${e.message}")
@@ -105,8 +125,20 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
                     Log.e(TAG, "Failed to fetch countries after $maxRetries retries")
                 }
             }
+
+            // Filtrer les pays en fonction de la requête
+            val filteredCountries = countries.filter { it.name.contains(query, ignoreCase = true) }
+                .sortedBy { it.name }
+
+            withContext(Dispatchers.Main) {
+                gifLoadingLayout.visibility = View.GONE
+                val adapter = CountryAdapter(filteredCountries, this@ListCountryActivity)
+                recyclerView.adapter = adapter
+            }
         }
     }
+
+
 
     override fun onCountryClick(country: Country) {
         val intent = Intent(this, CountryDetailsActivity::class.java).apply {
@@ -114,8 +146,11 @@ class ListCountryActivity : AppCompatActivity(), OnCountryClickListener {
             putExtra("country_flag", country.flag)
             putExtra("country_population", country.population)
             putExtra("country_area", country.area)
+            putExtra("north", country.north)
+            putExtra("south", country.south)
+            putExtra("east", country.east)
+            putExtra("west", country.west)
         }
         startActivity(intent)
     }
 }
-

@@ -1,35 +1,57 @@
 package fr.epf.mm.gestionclient
 
-import retrofit2.Call
-import retrofit2.Response
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
-//interface RandomUserService {
-//    @GET("api")
-//suspend  fun getUsers(@Query("results") size: Int) : GetUsersResult
-//}
+interface GeoNamesService {
+    @GET("countryInfoJSON")
+    suspend fun searchCountries(
+        @Query("username") username: String,
+        @Query("lang") lang: String = "fr",
+        @Query("name") country: String? = null
+    ): GeoNamesResponse
 
-interface RestCountriesService {
-    @GET("v3.1/name/{name}")
-    suspend fun getCountriesByName(@Path("name") name: String): List<CountryResponse>
+    @GET("weatherJSON")
+    suspend fun searchWeather(
+        @Query("north") north: Double,
+        @Query("south") south: Double,
+        @Query("east") east: Double,
+        @Query("west") west: Double,
+        @Query("username") username: String,
+        @Query("maxRows") maxRows: Int = 10
+    ): GeoNamesWeatherResponse
 }
 
-data class CountryResponse(
-    val name: Name,
-    val population: Long,
-    val area: Double,
-    val region: String,
-    val subregion: String,
-    val flags : Flags
+data class GeoNamesWeatherResponse(
+    val weatherObservations: List<WeatherObservation>
 )
 
-data class Name(
-    val common: String,
-    val official: String
+data class WeatherObservation(
+    val stationName: String,
+    val temperature: String?,
+    val humidity: String?,
+    val clouds: String?,
+    val datetime: String,
+    val lat: Double,
+    val lng: Double
 )
 
-data class Flags(
-    val png: String
+data class GeoNamesResponse(
+    val geonames: List<GeoNameCountry>
 )
+data class GeoNameCountry(
+    val countryName: String,
+    val population: Int,
+    val areaInSqKm: Double,
+    val capital: String,
+    val countryCode: String,
+    val north: Double,
+    val south: Double,
+    val east: Double,
+    val west: Double,
+) {
+    val flag: String
+        get() = "https://flagcdn.com/w80/${countryCode.lowercase()}.png"
+}

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/background_light"
+    android:background="@color/tertiaire_2"
     tools:context=".CountryDetailsActivity">
 
     <TextView
@@ -17,21 +17,21 @@
         android:textSize="34sp"
         android:textColor="@color/primary_text"
         android:padding="8dp"
-        tools:text="Nom du pays"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/country_name_textview"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cardElevation="4dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/country_name_textview">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -62,12 +62,12 @@
                 android:id="@+id/country_population_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:layout_marginStart="8dp"
                 android:textColor="@color/primary_text"
-                tools:text="1801745120"
-                app:layout_constraintTop_toTopOf="@id/Population"
+                android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/Population"
-                android:layout_marginStart="8dp" />
+                app:layout_constraintTop_toTopOf="@id/Population"
+                tools:text="1801745120" />
 
             <TextView
                 android:id="@+id/country_area_textview"
@@ -84,10 +84,10 @@
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="8dp"
-                app:cardElevation="8dp"
                 app:cardCornerRadius="8dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/country_flag_imageview"
@@ -95,9 +95,31 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     tools:src="@tools:sample/backgrounds/scenic" />
-
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
+
+    <ImageButton
+        android:id="@+id/buttonAddToFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:contentDescription="Ajouter aux favoris"
+        android:padding="8dp"
+        android:src="@android:drawable/btn_star_big_on"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_weather_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

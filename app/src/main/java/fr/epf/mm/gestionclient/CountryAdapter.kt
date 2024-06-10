@@ -1,6 +1,5 @@
 package fr.epf.mm.gestionclient
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,12 @@ import fr.epf.mm.gestionclient.model.Country
 interface OnCountryClickListener {
     fun onCountryClick(country: Country)
 }
-class ClientAdapter(private val countries: List<Country>, private val listener: OnCountryClickListener) : RecyclerView.Adapter<ClientAdapter.ClientViewHolder>() {
+
+class CountryAdapter(private val countries: List<Country>, private val listener: OnCountryClickListener) : RecyclerView.Adapter<CountryAdapter.ClientViewHolder>() {
 
     class ClientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val flagImageview: ImageView = itemView.findViewById(R.id.flag_view_imageview)
         val nameTextView: TextView = itemView.findViewById(R.id.country_view_textview)
+        val flagImageView: ImageView = itemView.findViewById(R.id.flag_view_imageview)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientViewHolder {
@@ -31,7 +31,7 @@ class ClientAdapter(private val countries: List<Country>, private val listener: 
 
         Glide.with(holder.itemView.context)
             .load(country.flag)
-            .into(holder.flagImageview)
+            .into(holder.flagImageView)
 
         holder.itemView.setOnClickListener {
             listener.onCountryClick(country)
@@ -40,6 +40,3 @@ class ClientAdapter(private val countries: List<Country>, private val listener: 
 
     override fun getItemCount() = countries.size
 }
-
-
-

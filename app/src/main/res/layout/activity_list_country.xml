@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListCountryActivity">
+    tools:context=".ListCountryActivity"
+    android:background="@color/tertiaire_2">
 
     <include layout="@layout/loading" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_country_recyclerview"
-        android:layout_width="409dp"
+        android:layout_width="410dp"
         android:layout_height="729dp"
         tools:itemCount="80"
         tools:listitem="@layout/country_view" />

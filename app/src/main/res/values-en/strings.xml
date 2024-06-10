@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Country List</string>
+    <string name="title_activity_home">Home Activity</string>
+    <string name="chercher_un_pays">Search a country</string>
+    <string name="valider">Validate</string>
+    <string name="GetAll">Get favorites</string>
+    <string name="espagnol">Spanish</string>
+    <string name="anglais">English</string>
+    <string name="francais">French</string>
+    <string name="Langue">Language</string>
+    <string name="Info_appli">Watch the weather around the world!</string>
+    <string name="cloud_image_desc">Image representing cloudy conditions</string>
+    <string name="station">Station: </string>
+    <string name="temperature">Temperature: </string>
+    <string name="humidity">Humidity: </string>
+</resources>
