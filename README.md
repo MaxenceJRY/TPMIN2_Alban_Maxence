@@ -27,6 +27,10 @@ de plusieurs stations différentes présentent dans le pays.
 ### Mettre en favori un pays
 
 Cliquez sur la petite étoile pour mettre le pays en favoris.
+Les favoris se retrouvent au niveau de la page dédier qui se situe dans la page d'accueil au niveau du bouton des favoris.
 
+- Exmple de la France
 <img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/abe67744-82e7-4935-b899-c8174afb4396" width="150">
 <img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/fb6e14cb-d817-48b4-9f9f-1fbfda247134" width="150">
+<img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/3d5b349b-d6b3-41cb-ab72-85f1ed394c87" width="150">
+
