@@ -5,4 +5,5 @@ Vous pouvez mettre en favoris vos pays que vous souhaitez consulter le plus souv
 ## Comment utiliser l'application ?
 ### Changer la langue de l'application
 Un bouton sur la page d'accueil vous permet de choisir entre plusieurs langues (français, anglais et espagnol).
+
 <img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/be6cedbe-553a-4310-b49b-4e55f818db14" alt="Nom de l'image" width="150">
