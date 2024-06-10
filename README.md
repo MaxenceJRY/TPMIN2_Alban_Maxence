@@ -21,4 +21,12 @@ Entrez dans la zone de texte le nom du pays (pas obligatoirement au complet).
 Cliquez sur le pays que vous souhaitez pour des détails sur le pays (sa superficie et sa population). Vous avez aussi accès à la météo
 de plusieurs stations différentes présentent dans le pays.
 
+- Exemple pour les détails de la France :
 <img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/abe67744-82e7-4935-b899-c8174afb4396" width="150">
+
+### Mettre en favori un pays
+
+Cliquez sur la petite étoile pour mettre le pays en favoris.
+
+<img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/abe67744-82e7-4935-b899-c8174afb4396" width="150">
+<img src="https://github.com/MaxenceJRY/TPMIN2_Alban_Maxence/assets/135508615/4156da2d-f850-4463-84c6-42e050d79fec" width="150">
